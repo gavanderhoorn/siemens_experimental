@@ -9,24 +9,17 @@ find_package(catkin REQUIRED COMPONENTS
 include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/include/)
 
-ADD_LIBRARY(libpniousr STATIC IMPORTED)
-SET_TARGET_PROPERTIES(libpniousr PROPERTIES
-    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/dk16xx_lib/libpniousr.a)
-
-ADD_LIBRARY(libl2interface STATIC IMPORTED)
-SET_TARGET_PROPERTIES(libl2interface PROPERTIES    
-    IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/dk16xx_lib/libl2interface.a)
-
 ADD_LIBRARY(siemens_cp1616
-	${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_controller.cpp
+        ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_controller.cpp
         ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_controller_callbacks.cpp
         ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_device.cpp
-        ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_device_callbacks.cpp
-        )
+        ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_device_callbacks.cpp)
 
 add_service_files(FILES set_alarm.srv
-                        reset_alarm.srv
-                 )
+                        reset_alarm.srv)
+                        
+#Link CP1616 Library with yaml-cpp
+target_link_libraries (siemens_cp1616 yaml-cpp)
      
 generate_messages(DEPENDENCIES)
 
@@ -34,30 +27,23 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES siemens_cp1616
   CATKIN_DEPENDS roscpp 
-  DEPENDS libpnoiusr libl2interface 
-)
-#Link CP1616 Library with yaml-cpp
-target_link_libraries (siemens_cp1616 yaml-cpp)
+  DEPENDS libpnoiusr libl2interface)
 
 #IO Controller wrapper
 add_executable(siemens_cp1616_io_controller_wrapper ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_controller_wrapper.cpp)
 target_link_libraries(siemens_cp1616_io_controller_wrapper ${catkin_LIBRARIES} 
                                                            siemens_cp1616
-                                                           libpniousr
-                                                           libl2interface                                                           
-                                                           pthread
-                                                           )
-                                                           
-
+                                                           libpniousr.a
+                                                           libl2interface.a                                                           
+                                                           pthread)
 #IO Device wrapper                                                   
 add_executable(siemens_cp1616_io_device_wrapper ${PROJECT_SOURCE_DIR}/src/siemens_cp1616_io_device_wrapper.cpp)
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS} siemens_cp1616_io_device_wrapper_gencpp)
 target_link_libraries(siemens_cp1616_io_device_wrapper ${catkin_LIBRARIES} 
                                                        siemens_cp1616 
-                                                       libpniousr
-                                                       libl2interface                                                     
-                                                       pthread
-                                                       )
+                                                       libpniousr.a
+                                                       libl2interface.a                                                     
+                                                       pthread)
 
 
 ## Mark executables and/or libraries for installation
