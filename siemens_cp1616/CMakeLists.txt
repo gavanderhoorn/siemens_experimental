@@ -54,6 +54,9 @@ target_link_libraries(
   libl2interface.a
   pthread
 )
+set_target_properties(${PROJECT_NAME}_io_controller_wrapper
+  PROPERTIES OUTPUT_NAME io_controller_wrapper
+  PREFIX "")
 
 #IO Device wrapper
 add_executable(
@@ -70,6 +73,9 @@ target_link_libraries(
   libl2interface.a
   pthread
 )
+set_target_properties(${PROJECT_NAME}_io_device_wrapper
+  PROPERTIES OUTPUT_NAME io_device_wrapper
+  PREFIX "")
 
 
 install(
