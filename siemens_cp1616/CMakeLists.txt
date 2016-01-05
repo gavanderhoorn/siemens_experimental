@@ -35,17 +35,17 @@ catkin_package(
 
 add_library(
   ${PROJECT_NAME}
-  src/siemens_cp1616_io_controller.cpp
-  src/siemens_cp1616_io_controller_callbacks.cpp
-  src/siemens_cp1616_io_device.cpp
-  src/siemens_cp1616_io_device_callbacks.cpp
+  src/io_controller.cpp
+  src/io_controller_callbacks.cpp
+  src/io_device.cpp
+  src/io_device_callbacks.cpp
 )
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
 
 #IO Controller wrapper
 add_executable(
   ${PROJECT_NAME}_io_controller_wrapper
-  src/siemens_cp1616_io_controller_wrapper.cpp)
+  src/io_controller_wrapper.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_io_controller_wrapper
   ${PROJECT_NAME}
@@ -61,7 +61,7 @@ set_target_properties(${PROJECT_NAME}_io_controller_wrapper
 #IO Device wrapper
 add_executable(
   ${PROJECT_NAME}_io_device_wrapper
-  src/siemens_cp1616_io_device_wrapper.cpp)
+  src/io_device_wrapper.cpp)
 add_dependencies(
   ${PROJECT_NAME}_io_device_wrapper
   siemens_cp1616_gencpp)
