@@ -95,3 +95,6 @@ install(
    DESTINATION
      ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
+
+# NOTE: 'test_*.launch' and 'test_*.yaml' files are not part of the binary
+#       distribution and thus are not installed.
