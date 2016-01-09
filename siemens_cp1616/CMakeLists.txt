@@ -5,6 +5,7 @@ find_package(catkin REQUIRED
   COMPONENTS
     message_generation
     roscpp
+    siemens_drivers
     std_msgs
 )
 
@@ -49,6 +50,7 @@ catkin_package(
   CATKIN_DEPENDS
     message_runtime
     roscpp
+    siemens_drivers
     std_msgs
   INCLUDE_DIRS
     include
@@ -64,19 +66,26 @@ add_library(
   src/io_device.cpp
   src/io_device_callbacks.cpp
 )
-target_link_libraries(${PROJECT_NAME} ${yaml_cpp_LIBRARY})
+target_link_libraries(
+  ${PROJECT_NAME}
+  ${yaml_cpp_LIBRARY}
+  ${catkin_LIBRARIES}
+)
+# make sure the DK16XX SDK finishes building before this target
+add_dependencies(
+  ${PROJECT_NAME}
+  ${siemens_drivers_EXPORTED_TARGETS}
+)
 
 #IO Controller wrapper
 add_executable(
   ${PROJECT_NAME}_io_controller_wrapper
-  src/io_controller_wrapper.cpp)
+  src/io_controller_wrapper.cpp
+)
 target_link_libraries(
   ${PROJECT_NAME}_io_controller_wrapper
   ${PROJECT_NAME}
   ${catkin_LIBRARIES}
-  libpniousr.a
-  libl2interface.a
-  pthread
 )
 set_target_properties(${PROJECT_NAME}_io_controller_wrapper
   PROPERTIES OUTPUT_NAME io_controller_wrapper
@@ -85,17 +94,16 @@ set_target_properties(${PROJECT_NAME}_io_controller_wrapper
 #IO Device wrapper
 add_executable(
   ${PROJECT_NAME}_io_device_wrapper
-  src/io_device_wrapper.cpp)
-add_dependencies(
-  ${PROJECT_NAME}_io_device_wrapper
-  siemens_cp1616_gencpp)
+  src/io_device_wrapper.cpp
+)
 target_link_libraries(
   ${PROJECT_NAME}_io_device_wrapper
   ${PROJECT_NAME}
   ${catkin_LIBRARIES}
-  libpniousr.a
-  libl2interface.a
-  pthread
+)
+add_dependencies(
+  ${PROJECT_NAME}_io_device_wrapper
+  siemens_cp1616_gencpp
 )
 set_target_properties(${PROJECT_NAME}_io_device_wrapper
   PROPERTIES OUTPUT_NAME io_device_wrapper

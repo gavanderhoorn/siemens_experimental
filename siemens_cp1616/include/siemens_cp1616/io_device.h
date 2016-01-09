@@ -44,9 +44,9 @@
 #include <fstream>
 
 //IO Base headers
-#include "pniobase.h"
-#include "pniousrd.h"
-#include "pnioerrx.h"
+#include <dk16xx/pniobase.h>
+#include <dk16xx/pniousrd.h>
+#include <dk16xx/pnioerrx.h>
 
 namespace siemens_cp1616
 {

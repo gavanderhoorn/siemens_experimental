@@ -27,8 +27,8 @@
 #include <fstream>
 
 //IO base headers
-#include "pniousrx.h"
-#include "pnioerrx.h"
+#include <dk16xx/pniousrx.h>
+#include <dk16xx/pnioerrx.h>
 
 namespace siemens_cp1616
 {
